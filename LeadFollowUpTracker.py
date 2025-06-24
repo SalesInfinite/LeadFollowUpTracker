@@ -73,7 +73,9 @@ def get_todays_followups():
 def mark_touch_done(name, touch):
     df = load_db()
     idx = df[df["Name"] == name].index[0]
-    df.at[idx, "Touch Status"] = str(df.at[idx, "Touch Status"]) + touch + ";"
+    existing = df.at[idx, "Touch Status"]
+    safe_status = "" if pd.isna(existing) else str(existing)
+    df.at[idx, "Touch Status"] = safe_status + touch + ";"
     save_db(df)
 
 # ---------- MARK AS SOLD/DEAD ----------
