@@ -39,7 +39,7 @@ def add_lead(name, phone, email):
         "Touch Status": ""
     }
     df = load_db()
-    df = df.append(new_lead, ignore_index=True)
+    df = pd.concat([df, pd.DataFrame([new_lead])], ignore_index=True)
     save_db(df)
 
 # ---------- FILTER TODAY ----------
