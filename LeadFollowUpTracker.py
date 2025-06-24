@@ -107,9 +107,11 @@ with st.form("add_lead_form"):
         else:
             st.error("Please fill in the name.")
 
-if st.button("❌ Flush All Leads", type="primary"):
-    flush_db()
-    st.warning("All leads have been flushed.")
+with st.expander("🧹 Admin Tools"):
+    confirm_flush = st.checkbox("Confirm flush of all leads")
+    if st.button("Flush All Leads", type="secondary", help="This will delete all lead data permanently.") and confirm_flush:
+        flush_db()
+        st.warning("All leads have been flushed.")
 
 st.subheader("📅 Today's Follow-Ups")
 todays_tasks = get_todays_followups()
