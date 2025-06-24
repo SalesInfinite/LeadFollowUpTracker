@@ -100,7 +100,7 @@ st.title("🔁 5-Day Lead Follow-Up Tool")
 st.subheader("➕ Add New Lead")
 with st.form("add_lead_form"):
     name = st.text_input("Name")
-    retro_date = st.date_input("Date Lead Came In (leave as today for new leads)", value=datetime.today())
+    retro_date = st.date_input("Date Lead Came In", value=datetime.today())
     if st.form_submit_button("Add Lead"):
         if name:
             add_lead(name, retro_date)
