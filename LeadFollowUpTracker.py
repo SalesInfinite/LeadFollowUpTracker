@@ -23,8 +23,8 @@ def save_db(df):
     df.to_csv(DB_FILE, index=False)
 
 # ---------- ADD LEAD ----------
-def add_lead(name):
-    today = datetime.today().date()
+def add_lead(name, created_date=None):
+    today = created_date if created_date else datetime.today().date()
     touches = []
     i = 0
     while len(touches) < 5:
@@ -100,9 +100,10 @@ st.title("🔁 5-Day Lead Follow-Up Tool")
 st.subheader("➕ Add New Lead")
 with st.form("add_lead_form"):
     name = st.text_input("Name")
+    retro_date = st.date_input("Date Lead Came In (leave as today for new leads)", value=datetime.today())
     if st.form_submit_button("Add Lead"):
         if name:
-            add_lead(name)
+            add_lead(name, retro_date)
             st.success(f"Lead '{name}' added successfully!")
         else:
             st.error("Please fill in the name.")
