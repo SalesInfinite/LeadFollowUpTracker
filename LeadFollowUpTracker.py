@@ -15,7 +15,9 @@ def init_db():
         df.to_csv(DB_FILE, index=False)
 
 def load_db():
-    return pd.read_csv(DB_FILE, parse_dates=["Created Date"] + TOUCHES + ["Date Sold"], dayfirst=True)
+    df = pd.read_csv(DB_FILE, parse_dates=["Created Date"] + TOUCHES + ["Date Sold"], dayfirst=True)
+    df["Touch Status"] = df["Touch Status"].fillna("")
+    return df
 
 def save_db(df):
     df.to_csv(DB_FILE, index=False)
@@ -23,7 +25,14 @@ def save_db(df):
 # ---------- ADD LEAD ----------
 def add_lead(name):
     today = datetime.today().date()
-    touches = [today + timedelta(days=i) for i in range(5)]
+    touches = []
+    i = 0
+    while len(touches) < 5:
+        day = today + timedelta(days=i)
+        if day.weekday() != 6:  # Skip Sundays (weekday() == 6)
+            touches.append(day)
+        i += 1
+
     new_lead = {
         "Name": name,
         "Created Date": today,
@@ -45,13 +54,13 @@ def get_todays_followups():
     df = load_db()
     today = datetime.today().date()
     followups = []
-    
+
     for _, row in df.iterrows():
         if row.get("Lead Status", "Active") != "Active":
             continue
-        
+
         completed_touches = str(row.get("Touch Status", ""))
-        
+
         for touch in TOUCHES:
             if pd.to_datetime(row[touch]).date() == today and touch not in completed_touches:
                 followups.append({
@@ -60,13 +69,11 @@ def get_todays_followups():
                 })
     return followups
 
-
 # ---------- MARK TOUCH DONE ----------
 def mark_touch_done(name, touch):
     df = load_db()
     idx = df[df["Name"] == name].index[0]
-    if touch not in str(df.at[idx, "Touch Status"]):
-        df.at[idx, "Touch Status"] = str(df.at[idx, "Touch Status"]) + touch + ";"
+    df.at[idx, "Touch Status"] = str(df.at[idx, "Touch Status"]) + touch + ";"
     save_db(df)
 
 # ---------- MARK AS SOLD/DEAD ----------
@@ -121,3 +128,7 @@ else:
                 update_lead_status(task['Name'], "Dead")
                 st.success(f"Lead '{task['Name']}' marked as Dead.")
                 st.rerun()
+
+st.subheader("📋 All Leads")
+all_data = load_db()
+st.dataframe(all_data)
