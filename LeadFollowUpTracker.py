@@ -61,7 +61,7 @@ def mark_touch_done(name, touch):
     df = load_db()
     idx = df[df["Name"] == name].index[0]
     if touch not in str(df.at[idx, "Touch Status"]):
-        df.at[idx, "Touch Status"] += touch + ";"
+        df.at[idx, "Touch Status"] = str(df.at[idx, "Touch Status"]) + touch + ";"
     save_db(df)
 
 # ---------- MARK AS SOLD/DEAD ----------
