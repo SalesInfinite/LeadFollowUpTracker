@@ -16,7 +16,7 @@ def init_db():
 
 def load_db():
     return pd.read_csv(DB_FILE, parse_dates=["Created Date"] + TOUCHES + ["Date Sold"], dayfirst=True)
-#test git
+
 def save_db(df):
     df.to_csv(DB_FILE, index=False)
 
