@@ -49,7 +49,7 @@ def get_todays_followups():
     followups = []
     for i, row in df.iterrows():
         for touch in TOUCHES:
-            if pd.to_datetime(row[touch]).date() == today and touch not in row["Touch Status"]:
+            if pd.to_datetime(row[touch]).date() == today and touch not in str(row["Touch Status"]):
                 followups.append({
                     "Name": row["Name"],
                     "Phone": row["Phone"],
