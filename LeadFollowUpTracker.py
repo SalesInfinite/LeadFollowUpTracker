@@ -111,8 +111,8 @@ else:
             if st.button(f"Mark as Sold - {task['Name']}"):
                 update_lead_status(task['Name'], "Sold")
                 st.success(f"Lead '{task['Name']}' marked as Sold.")
-                st.experimental_rerun()
+                st.rerun()
             if st.button(f"Mark as Dead - {task['Name']}"):
                 update_lead_status(task['Name'], "Dead")
                 st.success(f"Lead '{task['Name']}' marked as Dead.")
-                st.experimental_rerun()
+                st.rerun()

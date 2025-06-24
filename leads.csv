@@ -1,2 +1,4 @@
 Name,Created Date,First Touch,Second Touch,Third Touch,Fourth Touch,Fifth Touch,Touch Status,Lead Status,Date Sold
-Test,2025-06-24,2025-06-24,2025-06-25,2025-06-26,2025-06-27,2025-06-28,nanFirst Touch;,Active,
+Test,2025-06-24 00:00:00,2025-06-24 00:00:00,2025-06-25 00:00:00,2025-06-26 00:00:00,2025-06-27 00:00:00,2025-06-28 00:00:00,nanFirst Touch;,Sold,2025-06-24
+Test,2025-06-24,2025-06-24,2025-06-25,2025-06-26,2025-06-27,2025-06-28,,Active,
+Khalid,2025-06-24,2025-06-24,2025-06-25,2025-06-26,2025-06-27,2025-06-28,nanFirst Touch;,Active,
