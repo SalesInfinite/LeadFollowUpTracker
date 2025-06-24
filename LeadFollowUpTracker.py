@@ -45,16 +45,21 @@ def get_todays_followups():
     df = load_db()
     today = datetime.today().date()
     followups = []
+    
     for _, row in df.iterrows():
         if row.get("Lead Status", "Active") != "Active":
             continue
+        
+        completed_touches = str(row.get("Touch Status", ""))
+        
         for touch in TOUCHES:
-            if pd.to_datetime(row[touch]).date() == today and touch not in str(row["Touch Status"]):
+            if pd.to_datetime(row[touch]).date() == today and touch not in completed_touches:
                 followups.append({
                     "Name": row["Name"],
                     "Touch": touch
                 })
     return followups
+
 
 # ---------- MARK TOUCH DONE ----------
 def mark_touch_done(name, touch):
