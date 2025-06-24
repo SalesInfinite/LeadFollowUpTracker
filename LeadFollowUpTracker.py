@@ -107,7 +107,7 @@ else:
             if st.button(f"Mark {task['Touch']} done for {task['Name']}"):
                 mark_touch_done(task['Name'], task['Touch'])
                 st.success(f"{task['Touch']} marked as done for {task['Name']}")
-                st.experimental_rerun()
+                st.rerun()
             if st.button(f"Mark as Sold - {task['Name']}"):
                 update_lead_status(task['Name'], "Sold")
                 st.success(f"Lead '{task['Name']}' marked as Sold.")
