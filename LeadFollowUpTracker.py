@@ -49,6 +49,17 @@ def add_lead(name, created_date=None):
     df = pd.concat([df, pd.DataFrame([new_lead])], ignore_index=True)
     save_db(df)
 
+# ---------- BULK UPLOAD LEADS ----------
+def bulk_add_leads(uploaded_df):
+    for _, row in uploaded_df.iterrows():
+        name = row["Name"]
+        date_str = row["Date"]
+        try:
+            date = pd.to_datetime(date_str).date()
+            add_lead(name, date)
+        except Exception as e:
+            st.error(f"Failed to process row: {name}, {date_str} — {e}")
+
 # ---------- FILTER TODAY ----------
 def get_todays_followups():
     df = load_db()
@@ -100,13 +111,26 @@ st.title("🔁 5-Day Lead Follow-Up Tool")
 st.subheader("➕ Add New Lead")
 with st.form("add_lead_form"):
     name = st.text_input("Name")
-    retro_date = st.date_input("Date Lead Came In", value=datetime.today())
+    retro_date = st.date_input("Date Lead Came In (leave as today for new leads)", value=datetime.today())
     if st.form_submit_button("Add Lead"):
         if name:
             add_lead(name, retro_date)
             st.success(f"Lead '{name}' added successfully!")
         else:
             st.error("Please fill in the name.")
+
+st.subheader("📤 Bulk Upload Leads from CSV")
+uploaded_file = st.file_uploader("Upload CSV with two columns: 'Name' and 'Date'", type=["csv"])
+if uploaded_file is not None:
+    try:
+        df_uploaded = pd.read_csv(uploaded_file)
+        if "Name" in df_uploaded.columns and "Date" in df_uploaded.columns:
+            bulk_add_leads(df_uploaded)
+            st.success("Bulk leads added successfully!")
+        else:
+            st.error("CSV must contain 'Name' and 'Date' columns.")
+    except Exception as e:
+        st.error(f"Error processing CSV: {e}")
 
 with st.expander("🧹 Admin Tools"):
     confirm_flush = st.checkbox("Confirm flush of all leads")
